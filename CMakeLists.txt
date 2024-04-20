@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.11) # FetchContent is available in 3.11+
-project(gridrunner CXX)
+project(grid_project CXX)
 
 # Generate compile_commands.json
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -7,7 +7,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_STANDARD 11)
 
 # Dependencies
-set(RAYLIB_VERSION 5.0)
+set(RAYLIB_VERSION 4.5)
 find_package(raylib ${RAYLIB_VERSION} QUIET) # QUIET or REQUIRED
 if (NOT raylib_FOUND) # If there's none, fetch and build raylib
   include(FetchContent)
@@ -28,22 +28,7 @@ endif()
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic")
 
 add_subdirectory(grid)
-
-add_executable(${PROJECT_NAME})
-
-target_sources(${PROJECT_NAME}
-    PRIVATE
-        main.cpp
-)
-
-target_link_libraries(${PROJECT_NAME} PRIVATE raylib)
-target_link_libraries(${PROJECT_NAME} PRIVATE grid)
-
-# Web Configurations
-if (${PLATFORM} STREQUAL "Web")
-    # Tell Emscripten to build an example.html file.
-    set_target_properties(${PROJECT_NAME} PROPERTIES SUFFIX ".html")
-endif()
+add_subdirectory(demo)
 
 # Checks if OSX and links appropriate frameworks (Only required on MacOS)
 if (APPLE)

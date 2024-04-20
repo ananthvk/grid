@@ -39,3 +39,5 @@ build/
 builddir/
 subprojects/googletest-*
 subprojects/packagecache
+
+.vscode
