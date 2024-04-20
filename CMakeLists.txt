@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.11) # FetchContent is available in 3.11+
-project(grid CXX)
+project(gridrunner CXX)
 
 # Generate compile_commands.json
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -26,7 +26,18 @@ if (NOT raylib_FOUND) # If there's none, fetch and build raylib
 endif()
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic")
-add_subdirectory(src)
+
+add_subdirectory(grid)
+
+add_executable(${PROJECT_NAME})
+
+target_sources(${PROJECT_NAME}
+    PRIVATE
+        main.cpp
+)
+
+target_link_libraries(${PROJECT_NAME} PRIVATE raylib)
+target_link_libraries(${PROJECT_NAME} PRIVATE grid)
 
 # Web Configurations
 if (${PLATFORM} STREQUAL "Web")
