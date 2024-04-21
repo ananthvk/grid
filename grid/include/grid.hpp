@@ -4,6 +4,7 @@
 #include <vector>
 
 class GridBuilder;
+typedef void (*onclick_fptr)(const int &row, const int &col);
 
 class Grid
 {
@@ -29,7 +30,9 @@ class Grid
 
     void fill_cell_colors();
     void fill_hover_colors();
-    
+
+    onclick_fptr fptr;
+
 
   public:
     Grid();
@@ -41,6 +44,8 @@ class Grid
     void set_hover_color(int row, int col, Color color);
     Color get_hover_color(int row, int col);
     friend class GridBuilder;
+
+    void onclick(onclick_fptr fptr) { this->fptr = fptr; }
 };
 
 class GridBuilder

@@ -1,4 +1,4 @@
-project(grid_demo)
+project(game_of_life)
 
 add_executable(${PROJECT_NAME})
 

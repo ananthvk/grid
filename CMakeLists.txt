@@ -28,7 +28,7 @@ endif()
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic")
 
 add_subdirectory(grid)
-add_subdirectory(demo)
+add_subdirectory(game_of_life)
 
 # Checks if OSX and links appropriate frameworks (Only required on MacOS)
 if (APPLE)
