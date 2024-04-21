@@ -26,7 +26,7 @@ void apply_transformation(std::vector<int> &state, std::vector<int> &new_state)
             {
                 for (int j = -1; j <= 1; j += 1)
                 {
-                    if(i == 0 && j == 0)
+                    if (i == 0 && j == 0)
                         continue;
                     int row = r + i;
                     int col = c + j;
@@ -56,7 +56,9 @@ void apply_transformation(std::vector<int> &state, std::vector<int> &new_state)
 
 auto state = create_state(), new_state = create_state();
 
-void clicked(const int &row, const int &col) { state[row * rows + col] = 1; }
+void set_cell(const int &row, const int &col) { state[row * rows + col] = 1; }
+
+void erase_cell(const int &row, const int &col) { state[row * rows + col] = 0; }
 
 int main()
 {
@@ -65,7 +67,7 @@ int main()
     SetTargetFPS(60);
 
     // Advance the simulation after the specified seconds
-    float update_every = 1;
+    float update_every = 0.5;
     bool paused = false;
 
     state[320] = 1;
@@ -74,8 +76,19 @@ int main()
 
     float accumulator = 0;
 
-    Grid grid = GridBuilder().rows(rows).cols(cols).cell_color(WHITE).hover_color(BLACK).build();
-    grid.onclick(clicked);
+    Grid grid = GridBuilder()
+                    .rows(rows)
+                    .cols(cols)
+                    .cell_color(WHITE)
+                    .border_horizontal_color(GRAY)
+                    .border_vertical_color(GRAY)
+                    .thickness_horizontal(1)
+                    .thickness_vertical(1)
+                    .hover_color(BLACK)
+                    .build();
+
+    grid.onclick_left(set_cell);
+    grid.onclick_right(erase_cell);
 
     while (!WindowShouldClose())
     {

@@ -56,14 +56,11 @@ void Grid::render(float offset_x, float offset_y)
             if (CheckCollisionPointRec(GetMousePosition(),
                                        {pos.x, pos.y, (float)cell_size, (float)cell_size}))
             {
-                /*
-                if()
-                    set_color(i, j, LIME);
-                if(IsMouseButtonDown(MOUSE_BUTTON_RIGHT))
-                    set_color(i, j, cell_color);
-                */
-                if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && fptr)
-                    fptr(i, j);
+                if (on_left_click && IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+                    on_left_click(i, j);
+                if (on_right_click && IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+                    on_right_click(i, j);
+
                 DrawRectangleV(pos, {(float)cell_size, (float)cell_size}, get_hover_color(i, j));
             }
         }
@@ -91,7 +88,8 @@ void Grid::render() { render(offset_x, offset_y); }
 Grid::Grid()
     : rows(0), cols(0), cell_size(-1), cell_color(WHITE), hover_color(GREEN),
       border_horizontal_color(BLACK), border_vertical_color(BLACK), thickness_horizontal(0),
-      thickness_vertical(0), offset_x(0), offset_y(0), fptr(nullptr)
+      thickness_vertical(0), offset_x(0), offset_y(0), on_left_click(nullptr),
+      on_right_click(nullptr)
 {
 }
 

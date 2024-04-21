@@ -31,7 +31,8 @@ class Grid
     void fill_cell_colors();
     void fill_hover_colors();
 
-    onclick_fptr fptr;
+    onclick_fptr on_left_click;
+    onclick_fptr on_right_click;
 
 
   public:
@@ -45,7 +46,9 @@ class Grid
     Color get_hover_color(int row, int col);
     friend class GridBuilder;
 
-    void onclick(onclick_fptr fptr) { this->fptr = fptr; }
+    void onclick_left(onclick_fptr fptr) { this->on_left_click = fptr; }
+
+    void onclick_right(onclick_fptr fptr) { this->on_right_click = fptr; }
 };
 
 class GridBuilder
