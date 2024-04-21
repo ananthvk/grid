@@ -1,6 +1,48 @@
 #include "grid.hpp"
 #include <stdio.h>
 
+void Grid::fill_cell_colors()
+{
+    if (!cell_colors.size())
+    {
+        cell_colors.resize(rows * cols, cell_color);
+    }
+}
+
+void Grid::fill_hover_colors()
+{
+    if (!hover_colors.size())
+    {
+        hover_colors.resize(rows * cols, hover_color);
+    }
+}
+
+void Grid::set_color(int row, int col, Color color)
+{
+    fill_cell_colors();
+    cell_colors[row * rows + col] = color;
+}
+
+Color Grid::get_color(int row, int col)
+{
+    if (!cell_colors.size())
+        return cell_color;
+    return cell_colors[row * rows + col];
+}
+
+void Grid::set_hover_color(int row, int col, Color color)
+{
+    fill_hover_colors();
+    hover_colors[row * rows + col] = color;
+}
+
+Color Grid::get_hover_color(int row, int col)
+{
+    if (!hover_colors.size())
+        return hover_color;
+    return hover_colors[row * rows + col];
+}
+
 void Grid::render(float offset_x, float offset_y)
 {
     // Draw the cells and fill with cell color
@@ -9,11 +51,17 @@ void Grid::render(float offset_x, float offset_y)
         for (int j = 0; j < cols; j++)
         {
             Vector2 pos = {offset_x + (float)j * cell_size, offset_y + (float)i * cell_size};
-            DrawRectangleV(pos, {(float)cell_size, (float)cell_size}, cell_color);
+            DrawRectangleV(pos, {(float)cell_size, (float)cell_size}, get_color(i, j));
             // Check if mouse is hovering above this cell
             if (CheckCollisionPointRec(GetMousePosition(),
                                        {pos.x, pos.y, (float)cell_size, (float)cell_size}))
-                DrawRectangleV(pos, {(float)cell_size, (float)cell_size}, hover_color);
+            {
+                if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+                    set_color(i, j, hover_color);
+                if(IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))
+                    set_color(i, j, cell_color);
+                DrawRectangleV(pos, {(float)cell_size, (float)cell_size}, get_hover_color(i, j));
+            }
         }
     }
     // If there are n rows, n+1 lines should be drawn

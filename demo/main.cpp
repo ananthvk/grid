@@ -3,15 +3,14 @@
 
 int main()
 {
-    InitWindow(1920, 1080, "Window");
-    ToggleFullscreen();
+    InitWindow(800, 800, "Window");
     SetTargetFPS(60);
     Grid grid = GridBuilder()
-                    .rows(108)
-                    .cols(192)
-                    .cell_size(40)
-                    .thickness_horizontal(20)
-                    .thickness_vertical(20)
+                    .rows(10)
+                    .cols(10)
+                    .centered()
+                    .thickness_horizontal(1)
+                    .thickness_vertical(1)
                     .border_vertical_color(WHITE)
                     .border_horizontal_color(WHITE)
                     .cell_color(BLUE)

@@ -27,11 +27,19 @@ class Grid
     float offset_x;
     float offset_y;
 
+    void fill_cell_colors();
+    void fill_hover_colors();
+    
+
   public:
     Grid();
 
     void render(float offset_x, float offset_y);
     void render();
+    void set_color(int row, int col, Color color);
+    Color get_color(int row, int col);
+    void set_hover_color(int row, int col, Color color);
+    Color get_hover_color(int row, int col);
     friend class GridBuilder;
 };
 
