@@ -14,8 +14,9 @@ std::vector<int> create_state()
     return cells;
 }
 
-void apply_transformation(std::vector<int> &state, std::vector<int> &new_state)
+std::vector<int> apply_transformation(std::vector<int> &state)
 {
+    auto new_state = create_state();
     for (int r = 0; r < rows; r++)
     {
         for (int c = 0; c < cols; c++)
@@ -52,9 +53,10 @@ void apply_transformation(std::vector<int> &state, std::vector<int> &new_state)
             }
         }
     }
+    return new_state;
 }
 
-auto state = create_state(), new_state = create_state();
+auto state = create_state();
 
 void set_cell(const int &row, const int &col) { state[row * rows + col] = 1; }
 
@@ -113,8 +115,7 @@ int main()
         if (accumulator >= update_every)
         {
             accumulator = 0;
-            apply_transformation(state, new_state);
-            state = new_state;
+            state = apply_transformation(state);
         }
     }
     CloseWindow();

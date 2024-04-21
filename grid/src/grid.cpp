@@ -58,7 +58,7 @@ void Grid::render(float offset_x, float offset_y)
             {
                 if (on_left_click && IsMouseButtonDown(MOUSE_BUTTON_LEFT))
                     on_left_click(i, j);
-                if (on_right_click && IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+                if (on_right_click && IsMouseButtonDown(MOUSE_BUTTON_RIGHT))
                     on_right_click(i, j);
 
                 DrawRectangleV(pos, {(float)cell_size, (float)cell_size}, get_hover_color(i, j));
