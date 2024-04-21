@@ -1,6 +1,6 @@
 # grid
 
-A collection of many small projects, games and simulations which use 2D grids.
+A collection of many small projects, games and simulations which uses 2D grids.
 
 ## Building
 
