@@ -1,8 +1,9 @@
 #include "grid.hpp"
 #include "raylib.h"
+#include <string>
 
-const int rows = 100;
-const int cols = 100;
+const int rows = 200;
+const int cols = 200;
 
 // 0 - Dead
 // 1 - Alive
@@ -65,11 +66,12 @@ void erase_cell(const int &row, const int &col) { state[row * rows + col] = 0; }
 int main()
 {
 
-    InitWindow(800, 800, "Window");
+    InitWindow(1920, 1080, "Window");
     SetTargetFPS(60);
+    int generation = 0;
 
     // Advance the simulation after the specified seconds
-    float update_every = 0.5;
+    float update_every = 0.08;
     bool paused = false;
 
     state[320] = 1;
@@ -81,6 +83,7 @@ int main()
     Grid grid = GridBuilder()
                     .rows(rows)
                     .cols(cols)
+                    .cell_size(10)
                     .cell_color(WHITE)
                     .border_horizontal_color(GRAY)
                     .border_vertical_color(GRAY)
@@ -105,17 +108,36 @@ int main()
             update_every -= 0.005;
         if (IsKeyPressed(KEY_SPACE))
             paused = !paused;
+        if (IsKeyPressed(KEY_R))
+        {
+            state = create_state();
+            update_every = 0.1;
+            generation = 0;
+        }
+        if (IsKeyPressed(KEY_T))
+        {
+            state = create_state();
+            for (int i = 0; i < rows * cols; i++)
+                state[i] = GetRandomValue(0, 1);
+        }
         BeginDrawing();
         ClearBackground(RAYWHITE);
         grid.render();
         for (int i = 0; i < rows * cols; i++)
             grid.set_color(i / rows, i % rows, state[i] ? BLACK : WHITE);
+
+        std::string gen = "GEN:" + std::to_string(generation);
+        if (paused)
+            gen += " Paused: Press spacebar to continue";
+        DrawText(gen.c_str(), 0, 0, 20, BLUE);
         EndDrawing();
 
-        if (accumulator >= update_every)
+
+        if (!paused && accumulator >= update_every)
         {
             accumulator = 0;
             state = apply_transformation(state);
+            generation++;
         }
     }
     CloseWindow();
