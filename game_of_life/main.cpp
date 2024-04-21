@@ -74,10 +74,6 @@ int main()
     float update_every = 0.08;
     bool paused = false;
 
-    state[320] = 1;
-    state[321] = 1;
-    state[322] = 1;
-
     float accumulator = 0;
 
     Grid grid = GridBuilder()
