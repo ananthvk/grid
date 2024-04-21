@@ -1,7 +1,21 @@
 #include "grid.hpp"
+#include <stdio.h>
 
 void Grid::render(float offset_x, float offset_y)
 {
+    // Draw the cells and fill with cell color
+    for (int i = 0; i < rows; i++)
+    {
+        for (int j = 0; j < cols; j++)
+        {
+            Vector2 pos = {offset_x + (float)j * cell_size, offset_y + (float)i * cell_size};
+            DrawRectangleV(pos, {(float)cell_size, (float)cell_size}, cell_color);
+            // Check if mouse is hovering above this cell
+            if (CheckCollisionPointRec(GetMousePosition(),
+                                       {pos.x, pos.y, (float)cell_size, (float)cell_size}))
+                DrawRectangleV(pos, {(float)cell_size, (float)cell_size}, hover_color);
+        }
+    }
     // If there are n rows, n+1 lines should be drawn
     if (thickness_horizontal)
         for (int i = 0; i <= rows; i++)
@@ -20,11 +34,20 @@ void Grid::render(float offset_x, float offset_y)
         }
 }
 
+void Grid::render() { render(offset_x, offset_y); }
+
 Grid::Grid()
-    : rows(0), cols(0), cell_size(0), cell_color(WHITE), hover_color(GREEN),
-      border_horizontal_color(BLACK), border_vertical_color(BLACK), thickness_horizontal(2),
-      thickness_vertical(1)
+    : rows(0), cols(0), cell_size(-1), cell_color(WHITE), hover_color(GREEN),
+      border_horizontal_color(BLACK), border_vertical_color(BLACK), thickness_horizontal(1),
+      thickness_vertical(1), offset_x(0), offset_y(0)
 {
+}
+
+GridBuilder &GridBuilder::sides(int s)
+{
+    grid.rows = s;
+    grid.cols = s;
+    return *this;
 }
 
 GridBuilder &GridBuilder::rows(int r)
@@ -41,6 +64,7 @@ GridBuilder &GridBuilder::cols(int c)
 
 GridBuilder &GridBuilder::cell_size(int sz)
 {
+    use_side_len = false;
     grid.cell_size = sz;
     return *this;
 }
@@ -81,4 +105,41 @@ GridBuilder &GridBuilder::thickness_vertical(float thickness)
     return *this;
 }
 
-Grid GridBuilder::build() { return grid; }
+GridBuilder &GridBuilder::side_length(int length)
+{
+    side_len = length;
+    use_side_len = true;
+    return *this;
+}
+
+GridBuilder &GridBuilder::centered()
+{
+    is_centered = true;
+    return *this;
+}
+
+Grid GridBuilder::build()
+{
+    if (use_side_len)
+    {
+        if (side_len == -1)
+        {
+            side_len = std::min(GetScreenHeight(), GetScreenWidth());
+            if (is_centered)
+                side_len = side_len / 2;
+        }
+
+        // Compute the cell size using side length
+        grid.cell_size = side_len / std::max(grid.rows, grid.cols);
+    }
+
+    if (is_centered)
+    {
+        float x_mid = grid.rows * grid.cell_size / 2.0;
+        float y_mid = grid.cols * grid.cell_size / 2.0;
+        grid.offset_x = (GetScreenWidth() / 2.0) - x_mid;
+        grid.offset_y = (GetScreenHeight() / 2.0) - y_mid;
+    }
+
+    return grid;
+}
