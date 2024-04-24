@@ -56,6 +56,8 @@ void Grid::render(float offset_x, float offset_y)
             if (CheckCollisionPointRec(GetMousePosition(),
                                        {pos.x, pos.y, (float)cell_size, (float)cell_size}))
             {
+                if(on_hover)
+                    on_hover(i, j);
                 if (on_left_click && IsMouseButtonDown(MOUSE_BUTTON_LEFT))
                     on_left_click(i, j);
                 if (on_right_click && IsMouseButtonDown(MOUSE_BUTTON_RIGHT))
@@ -89,7 +91,7 @@ Grid::Grid()
     : rows(0), cols(0), cell_size(-1), cell_color(WHITE), hover_color(GREEN),
       border_horizontal_color(BLACK), border_vertical_color(BLACK), thickness_horizontal(0),
       thickness_vertical(0), offset_x(0), offset_y(0), on_left_click(nullptr),
-      on_right_click(nullptr)
+      on_right_click(nullptr), on_hover(nullptr)
 {
 }
 

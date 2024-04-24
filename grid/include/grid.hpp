@@ -33,6 +33,7 @@ class Grid
 
     onclick_fptr on_left_click;
     onclick_fptr on_right_click;
+    onclick_fptr on_hover;
 
 
   public:
@@ -49,6 +50,8 @@ class Grid
     void onclick_left(onclick_fptr fptr) { this->on_left_click = fptr; }
 
     void onclick_right(onclick_fptr fptr) { this->on_right_click = fptr; }
+
+    void onhover(onclick_fptr fptr) { this->on_hover = fptr; }
 };
 
 class GridBuilder
